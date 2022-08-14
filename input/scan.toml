@@ -1,0 +1,40 @@
+###
+# Info string to be printed during program run
+info = "nu^-1(n=0) = 1.70251"
+
+###
+# Series to be resumed, starts with constant term
+f   = [2.0, -0.25, -0.0859375, 0.11442530392291644, -0.2875129509289455, 0.9561331447210607, -3.855754549203757]
+
+### Fixed resummation parameters
+# ep - final point
+ep = 1
+#  a - general fixed by symmetry considerations
+a   = 0.375
+
+### Resummation parameters to be scanned
+# b [min, max, subdivisions]
+b   = [0.0, 40.0, 80]
+# lambda
+lam = [0.0, 4.5, 225]
+# q = q/2
+q   = [0.0, 0.4, 40]
+
+
+### Scan plateaus parameters in number of subdivisions units 
+deltab   = 40
+deltalam = 50
+deltaq   = 1
+
+
+### If provided results are saved in <dump> as .tsv file: b,lam,q,f(l),f(l-1),f(l-2)
+# dump = gridNU
+
+### Save final results
+# output file name
+out = "nuInvN0.m"
+
+
+### Integration order
+# set order of untegration rules, default 20
+#n = 40

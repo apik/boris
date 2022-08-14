@@ -1,0 +1,19 @@
+[package]
+name = "boris"
+version = "0.1.0"
+authors = ["Andrey Pikelner <pikelner@theor.jinr.ru>"]
+edition = "2018"
+default-run = "point"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+assert_float_eq = "*"
+special = "*"
+num = "0.4"
+clap = { version = "3.2.16", features = ["derive"] }
+toml = "0.5.2"
+serde = "1.0.136"
+serde_derive = "1.0.136"
+indicatif = "*"
+console = "*"
+rayon = "1.5"
