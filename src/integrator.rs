@@ -3,7 +3,7 @@ use special::Gamma;
 pub fn imtqlx ( n: usize, d: &mut [f64], e: &mut [f64], z: &mut [f64]) -> Result<String, String> {
 
     const MAXITER:usize = 30;
-    return match n {
+    match n {
 
         1 => Ok("n=1".to_string()),
 
@@ -42,13 +42,13 @@ pub fn imtqlx ( n: usize, d: &mut [f64], e: &mut [f64], z: &mut [f64]) -> Result
                             r = ( c * c + 1f64 ).sqrt();
                             e[i] = f * r;
                             s = 1f64 / r;
-                            c = c * s;
+                            c *= s;
                         } else{
                             s = f / g;
                             r = ( s * s + 1f64 ).sqrt();
                             e[i] = g * r;
                             c = 1f64 / r;
-                            s = s * c;
+                            s *= c;
                         }
                         g = d[i] - p;
                         r = ( d[i-1] - g ) * s + 2f64 * c * b;
@@ -59,7 +59,7 @@ pub fn imtqlx ( n: usize, d: &mut [f64], e: &mut [f64], z: &mut [f64]) -> Result
                         z[i] = s * z[i-1] + c * f;
                         z[i-1] = c * z[i-1] - s * f;
                     }
-                    d[l-1] = d[l-1] - p;
+                    d[l-1] -= p;
                     e[l-1] = g;
                     e[m-1] = 0f64;
                 }
@@ -123,7 +123,7 @@ pub fn gauss_laguerre_weights(n: usize, alpha: f64, nodes: &mut [f64], weights: 
         for w in weights.iter_mut() { *w *= *w; }
         return Ok("Success!".to_string())
     }
-    return Err("Unable to generate nodes and weights!".to_string())
+    Err("Unable to generate nodes and weights!".to_string())
 }
 
 // Caclualate node coordinates and weights

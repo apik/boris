@@ -7,7 +7,7 @@ use crate::integrator;
 pub fn poch_div_fac(a: f64, n: usize) -> f64 {
 
     match n {
-        0 => 1 as f64,
+        0 => 1_f64,
         1 => a,
         _ => poch_div_fac(a, n-1)*(a + (n-1) as f64)/(n as f64)
     }
@@ -96,6 +96,6 @@ impl<'slice> Resummator<'slice> {
             }
             int += f_x*self.weights[k];
         }
-        return int;
+        int
     }
 }

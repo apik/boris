@@ -2,7 +2,7 @@ use clap::Parser;
 use serde_derive::Deserialize;
 use std::fs;
 use std::process::exit;
-use toml;
+
 use std::fmt;
 
 /// Single point mode
@@ -77,7 +77,7 @@ fn main() {
     let contents = match fs::read_to_string(args.input.clone()) {
         Ok(c) => c,
         Err(_) => {
-            eprintln!("Could not read file `{}`", args.input.clone());
+            eprintln!("Could not read file `{}`", args.input);
             exit(1);
         }
     };
@@ -85,7 +85,7 @@ fn main() {
     let cfg_data: ConfigInput = match toml::from_str(&contents) {
         Ok(cfg) => cfg,
         Err(_) => {
-            eprintln!("Unable to load data from `{}`",args.input.clone());
+            eprintln!("Unable to load data from `{}`",args.input);
             exit(1);
         }
     };
@@ -169,10 +169,7 @@ fn main() {
         println!("  x^{ord}: {num:.prec$}", prec = 5, num = t, ord = i);
     }
 
-    let integ_ord = match cfg_data.n {
-        Some(n) => n,
-        None    => 20,
-    };
+    let integ_ord = cfg_data.n.unwrap_or(20);
 
 
 

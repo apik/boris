@@ -3,7 +3,7 @@ use clap::Parser;
 use serde_derive::Deserialize;
 use std::fs;
 use std::process::exit;
-use toml;
+
 use std::fs::File;
 use std::io::Write;
 use indicatif::ProgressBar;
@@ -211,7 +211,7 @@ impl ErrorEstimator {
         println!("{:>10} = {:>20.6}", "V(lam)", err_db[0].7);
         println!("{:>10} = {:>20.6}", "Var(q)", err_db[0].8);
         println!("{:>10} = {:>20.6}", "f", err_db[0].4);
-        println!("");
+        println!();
         println!("{:>10} = {:>20.6}", "b", self.b.min() + self.b.step()*err_db[0].1 as f64);
         println!("{:>10} = {:>20.6}", "lam", self.lam.min() + self.lam.step()*err_db[0].2 as f64);
         println!("{:>10} = {:>20.6}", "q", self.q.min() + self.q.step()*err_db[0].3 as f64);
@@ -254,7 +254,7 @@ fn main() {
     let contents = match fs::read_to_string(args.input.clone()) {
         Ok(c) => c,
         Err(_) => {
-            eprintln!("Could not read file `{}`", args.input.clone());
+            eprintln!("Could not read file `{}`", args.input);
             exit(1);
         }
     };
@@ -262,7 +262,7 @@ fn main() {
     let cfg_data: ConfigInput = match toml::from_str(&contents) {
         Ok(cfg) => cfg,
         Err(_) => {
-            eprintln!("Unable to load data from `{}`",args.input.clone());
+            eprintln!("Unable to load data from `{}`",args.input);
             exit(1);
         }
     };
@@ -322,10 +322,7 @@ fn main() {
     }
 
     // Set order of integration rules
-    let integ_ord = match cfg_data.intord {
-        Some(n) => n,
-        None    => 20,
-    };
+    let integ_ord = cfg_data.intord.unwrap_or(20);
 
     let niter = b.sites() * lam.sites() * q.sites();
 
