@@ -43,31 +43,31 @@ struct ConfigInput {
 }
 
 // Save info about input parameters
-enum InputType {
-    FromConfig,
-    FromArgs,
-    FromDefaults,
+enum InputTypeFrom {
+    Config,
+    Args,
+    Defaults,
 }
 
-impl fmt::Display for InputType {
+impl fmt::Display for InputTypeFrom {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            InputType::FromConfig   => write!(f, "CNFG"),
-            InputType::FromArgs     => write!(f, "ARGS"),
-            InputType::FromDefaults => write!(f, "DFLT"),
+            InputTypeFrom::Config   => write!(f, "CNFG"),
+            InputTypeFrom::Args     => write!(f, "ARGS"),
+            InputTypeFrom::Defaults => write!(f, "DFLT"),
         }
     }
 }
 
 
 struct InputParameters {
-    info: (String, InputType),
-    f:    (Vec<f64>, InputType),
-    ep:   (f64, InputType),
-    a:    (f64, InputType),
-    b:    (f64, InputType),
-    lam:  (f64, InputType),
-    q:    (f64, InputType),
+    info: (String, InputTypeFrom),
+    f:    (Vec<f64>, InputTypeFrom),
+    ep:   (f64, InputTypeFrom),
+    a:    (f64, InputTypeFrom),
+    b:    (f64, InputTypeFrom),
+    lam:  (f64, InputTypeFrom),
+    q:    (f64, InputTypeFrom),
 }
 
 fn main() {
@@ -92,13 +92,13 @@ fn main() {
 
     // Initialize default values
     let mut ip = InputParameters{
-        info: ("".to_string(), InputType::FromDefaults),
-        f: (Vec::new(), InputType::FromConfig),
-        ep: (0f64, InputType::FromConfig),
-        a: (0f64, InputType::FromDefaults),
-        b: (0f64, InputType::FromDefaults),
-        lam: (0f64, InputType::FromDefaults),
-        q: (0f64, InputType::FromDefaults),
+        info: ("".to_string(), InputTypeFrom::Defaults),
+        f: (Vec::new(), InputTypeFrom::Config),
+        ep: (0f64, InputTypeFrom::Config),
+        a: (0f64, InputTypeFrom::Defaults),
+        b: (0f64, InputTypeFrom::Defaults),
+        lam: (0f64, InputTypeFrom::Defaults),
+        q: (0f64, InputTypeFrom::Defaults),
     };
 
     // 
@@ -107,52 +107,52 @@ fn main() {
     ip.info = (match cfg_data.info {
         Some(p) => p,
         None => "".to_string(),
-    }, InputType::FromConfig);
+    }, InputTypeFrom::Config);
     // input series f = [...]
-    ip.f = (cfg_data.f.expect("Provide input series in the form f=[0.1, 0.2, 0.3,...]").iter().map(|&val| val as f64).collect(), InputType::FromConfig);
+    ip.f = (cfg_data.f.expect("Provide input series in the form f=[0.1, 0.2, 0.3,...]").iter().map(|&val| val as f64).collect(), InputTypeFrom::Config);
     // input ep
-    ip.ep = (cfg_data.ep.expect("Provide ep=...") as f64, InputType::FromConfig);
+    ip.ep = (cfg_data.ep.expect("Provide ep=...") as f64, InputTypeFrom::Config);
 
     //
     // Input from file and command line
     //
 
     ip.a = match args.a {
-        Some(a) => (a, InputType::FromArgs),
+        Some(a) => (a, InputTypeFrom::Args),
         None    => {
             match cfg_data.a {
-                Some(a) => (a as f64, InputType::FromConfig),
-                None    => (0f64, InputType::FromDefaults),
+                Some(a) => (a as f64, InputTypeFrom::Config),
+                None    => (0f64, InputTypeFrom::Defaults),
             }
         },
     };
 
     ip.b = match args.b {
-        Some(b) => (b, InputType::FromArgs),
+        Some(b) => (b, InputTypeFrom::Args),
         None    => {
             match cfg_data.b {
-                Some(b) => (b as f64, InputType::FromConfig),
-                None    => (0f64, InputType::FromDefaults),
+                Some(b) => (b as f64, InputTypeFrom::Config),
+                None    => (0f64, InputTypeFrom::Defaults),
             }
         },
     };
 
     ip.lam = match args.lam {
-        Some(lam) => (lam, InputType::FromArgs),
+        Some(lam) => (lam, InputTypeFrom::Args),
         None    => {
             match cfg_data.lam {
-                Some(lam) => (lam as f64, InputType::FromConfig),
-                None    => (0f64, InputType::FromDefaults),
+                Some(lam) => (lam as f64, InputTypeFrom::Config),
+                None    => (0f64, InputTypeFrom::Defaults),
             }
         },
     };
 
     ip.q = match args.q {
-        Some(q) => (q, InputType::FromArgs),
+        Some(q) => (q, InputTypeFrom::Args),
         None    => {
             match cfg_data.q {
-                Some(q) => (q as f64, InputType::FromConfig),
-                None    => (0f64, InputType::FromDefaults),
+                Some(q) => (q as f64, InputTypeFrom::Config),
+                None    => (0f64, InputTypeFrom::Defaults),
             }
         },
     };    

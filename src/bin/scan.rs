@@ -76,6 +76,7 @@ fn max_or_cut(p: &Par3, pos: usize, delta: usize) -> usize {
 
 
 type Grid3d = Vec<Vec<Vec<f64>>>;
+type ErrComponents = (f64, usize, usize, usize, f64, f64, f64, f64, f64);
 
 struct ErrorEstimator {
     // calculated grids
@@ -150,7 +151,7 @@ impl ErrorEstimator {
         self.delta_q = delta_q;
 
         // err -> (b,lam,q,   f,  d_l, var_b, var_lam, var_q)
-        let mut err_db: Vec<(f64, usize, usize, usize, f64, f64, f64, f64, f64)> =
+        let mut err_db: Vec<ErrComponents> =
             Vec::with_capacity(self.b.sites()*self.lam.sites()*self.q.sites());
         // Calculate error on each site oof the grid
         println!("\n{:^40}", style("SCAN GRID").bold().dim());
@@ -420,9 +421,8 @@ fn main() {
             None      => File::create(cfg_data.dump.unwrap()),
         };
 
-        if f_dump_state.is_ok() {
-            let mut f_dump = f_dump_state.unwrap();
-
+        if let Ok(mut f_dump) = f_dump_state {
+            
             for ib in 0..(b.div()+1) {
                 for ilam in 0..(lam.div()+1) {
                     for iq in 0..(q.div()+1) {
@@ -460,8 +460,7 @@ fn main() {
     match cfg_data.out {
         Some(o) => {
             let f_out_state = File::create(o);
-            if f_out_state.is_ok() {
-                let mut f_out = f_out_state.unwrap();
+            if let Ok(mut f_out) = f_out_state {
                 if writeln!(f_out, "{{ {}, {}, {} }}", res_min, mean, sigma).is_ok() {
                     println!("\n{:^40}\n", style("RESULTS SAVED").bold().dim());
                 }
